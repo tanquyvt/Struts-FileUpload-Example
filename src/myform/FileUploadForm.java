@@ -9,7 +9,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.upload.FormFile;
 
 public class FileUploadForm extends ActionForm {
-	
+
 	private FormFile file;
 
 	public FormFile getFile() {
@@ -19,33 +19,43 @@ public class FileUploadForm extends ActionForm {
 	public void setFile(FormFile file) {
 		this.file = file;
 	}
-	
+
 	@Override
 	public ActionErrors validate(ActionMapping mapping,
 			HttpServletRequest request) {
 
 		ActionErrors errors = new ActionErrors();
-		
+
 		if (getFile().getFileSize() == 0) {
-			errors.add("common.file.err", new ActionMessage("error.common.file.required"));
+			errors.add("common.file.err", new ActionMessage(
+					"error.common.file.required"));
 			return errors;
 		}
-		
-		//only allow text file to upload
-		if (!"text/plain".equals(getFile().getContentType())) {
-			errors.add("common.file.err.ext", new ActionMessage("error.common.file.textfile.only"));
+
+		// only allow text file to upload
+		/*if (!"text/plain".equals(getFile().getContentType())) {
+			errors.add("common.file.err.ext", new ActionMessage(
+					"error.common.file.textfile.only"));
 			return errors;
-		}
-		
-		//file size can't larger than 10kb
+		}*/
+
+		// file size can't larger than 10kb
 		System.out.println(getFile().getFileSize());
-		if (getFile().getFileSize() > 10240) {	//10kb
-			errors.add("common.file.err.size", new ActionMessage("error.common.file.size.limit", 10240));
+		if (getFile().getFileSize() > 1024000) { // 1000kb
+			errors.add("common.file.err.size", new ActionMessage(
+					"error.common.file.size.limit", 1024000));
 			return errors;
 		}
-		
+
 		return errors;
-		
+
+	}
+
+	@Override
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+
+		this.file = null;
+
 	}
 
 }
